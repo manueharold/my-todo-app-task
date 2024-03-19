@@ -1,6 +1,7 @@
 body {
-  margin: -20px; 
-  background: linear-gradient(to right, #5E1B89, #F4512C); 
+  margin: -20px; /* Offset the border */
+  background: linear-gradient(to right, #5E1B89, #F4512C); /* Gradient background */
+  position: relative; /* Add position relative */
 }
 
 h1{
@@ -40,22 +41,25 @@ box-shadow: 0px 5px 7px #F4512C;
   flex-direction: column;
   align-items: flex-start;
   margin-right: 25px;
+  margin-bottom: 25px;
 }
 
-.todo-input-item label{
+.todo-input-item label {
   font-weight: bold;
   margin-bottom: 10px;
+  color: #5E1B89; 
 }
 
 .todo-input-item input {
   padding: 8px;
   border: 2px solid #ccc; 
   width: 250px;
+  margin-bottom: 10px;
 }
 
 .todo-input-item input:focus {
   outline: 2px solid #F4512C;
-  border-color: #F4512C; 
+  border-color: #F4512C; /* Change border color when focused */
 }
 
 .primaryBtn{
@@ -67,18 +71,20 @@ box-shadow: 0px 5px 7px #F4512C;
   padding: 10px;
   width: 60px;
   cursor: pointer;
+  outline: none; 
 }
 
-.secondaryBtn{
-  background-color: #5E1B89;
+.secondaryBtn {
+  background-color: #5e1b89;
   color: white;
-  border:none;
+  border: none;
   border-radius: 0px;
   margin-top: 25px;
   padding: 10px;
   width: fit-content;
   cursor: pointer;
-
+  margin-right: 10px; 
+  outline: none; 
 }
 
 .active{
@@ -97,7 +103,7 @@ box-shadow: 0px 5px 7px #F4512C;
 
 .todo-list-item {
   background-color: #ffffff;
-  border: 2px solid #F4512C;
+  border: 2px solid #F4512C; 
   border-radius: 5px; 
   display: flex;
   justify-content: space-between;
@@ -108,14 +114,14 @@ box-shadow: 0px 5px 7px #F4512C;
 
 .todo-list-item h3 {
   font-size: 20px; 
-  color: black;
+  color: #5E1B89;
   font-weight: bold;
   margin: 0;
 }
 
 .todo-list-item p {
   font-size: 14px;
-  color: black;
+  color: #5E1B89;
   margin-top: 5px; 
 }
 
@@ -123,10 +129,6 @@ box-shadow: 0px 5px 7px #F4512C;
 .todo-list-item .check-icon {
   font-size: 25px;
   cursor: pointer;
-}
-
-.todo-list-item .icon:hover {
-  color: red;
 }
 
 .todo-list-item .check-icon {
@@ -157,13 +159,10 @@ box-shadow: 0px 5px 7px #F4512C;
   width: fit-content;
 }
 
-.icon{
+.icon {
   font-size: 35px;
+  color: #F4512C; 
   cursor: pointer;
-}
-
-.icon:hover{
-  color: red;
 }
 
 .check-icon{
@@ -198,24 +197,96 @@ box-shadow: 0px 5px 7px #F4512C;
 
 .todo-wrapper {
   position: relative;
- 
-
-
   padding-bottom: 50px; 
 }
 
+
 .todo-actions {
   position: absolute;
-  bottom: 10px;
+  bottom: 10px; 
   right: 10px;
+  width: calc(100% - 20px); 
+  display: flex;
+  justify-content: flex-end;
 }
 
-.delete-all-btn,
-.mark-all-complete-btn,
-.mark-all-not-complete-btn {
+.todo-actions-container {
+  position: absolute;
+  bottom: 20px; 
+  right: 20px; 
+}
+
+.delete-all-btn {
   margin-left: 10px;
   padding: 5px 10px;
   color: white;
   background-color: #5E1B89;
   cursor: pointer;
+  outline: none; 
+  border:none;
+  border-radius: 0px;
+}
+
+
+.mark-all-complete-btn,
+.mark-all-not-complete-btn {
+  margin-left: 10px;
+  padding: 5px 10px;
+  color: white;
+  background-color: #F4512C; 
+  cursor: pointer;
+  outline: none; 
+  border:none;
+  border-radius: 0px;
+}
+
+
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgba(0, 0, 0, 0.4); 
+}
+
+.modal.open {
+  display: block; 
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; 
+  max-width: 400px; 
+}
+
+.modal-content p {
+  font-size: 16px; 
+  margin-bottom: 15px; 
+  color: #5E1B89;
+}
+
+.modal-actions button {
+  margin-left: 10px;
+  color: white; 
+  background-color: #5E1B89; 
+  cursor: pointer;
+  border: none;
+}
+
+.modal-actions {
+  margin-top: 20px;
+  text-align: right;
+  color: white;
+}
+
+.modal-actions button {
+  margin-left: 10px;
+  color: white;
 }
