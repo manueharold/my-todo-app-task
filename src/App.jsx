@@ -77,10 +77,13 @@ function App() {
   };
   
   const handleDeleteCompletedTodo = (index) => {
-    let reducedTodo = [...completedTodos];
-    reducedTodo.splice(index, 1);
-    localStorage.setItem('completedTodos', JSON.stringify(reducedTodo));
-    setCompletedTodos(reducedTodo);
+    const confirmDelete = window.confirm('Are you sure you want to delete this task?');
+    if (confirmDelete) {
+      let reducedTodo = [...completedTodos];
+      reducedTodo.splice(index, 1);
+      localStorage.setItem('completedTodos', JSON.stringify(reducedTodo));
+      setCompletedTodos(reducedTodo);
+    }
   };
 
   const handleDeleteAll = () => {
