@@ -103,10 +103,15 @@ function App() {
 
   const handleDeleteAll = () => {
     showConfirmation('Are you sure you want to delete all tasks?', () => {
-      setTodos([]);
-      setCompletedTodos([]);
-      localStorage.removeItem('todolist');
-      localStorage.removeItem('completedTodos');
+      if (isCompleteScreen === false) {
+        // Delete all tasks from the Todo tab
+        setTodos([]);
+        localStorage.removeItem('todolist');
+      } else {
+        // Delete all completed tasks from the Complete tab
+        setCompletedTodos([]);
+        localStorage.removeItem('completedTodos');
+      }
     });
   };
 
