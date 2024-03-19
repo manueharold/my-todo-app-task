@@ -1,0 +1,183 @@
+body {
+  margin: -20px; /* Offset the border */
+  background: linear-gradient(to right, #5E1B89, #F4512C); /* Gradient background */
+}
+
+h1{
+  text-align: center;
+  color: white;
+}
+
+.todo-header {
+  text-align: center;
+  color: white;
+}
+
+.todo-wrapper{
+background: #ffffff;
+padding: 2%;
+width: fit-content;
+margin-left: auto;
+margin-right: auto;
+margin-top: 3%;
+max-height: 80vh;
+overflow-y: auto;
+box-shadow: 0px 5px 7px #F4512C;
+
+}
+
+.todo-input{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #F4512C;
+  padding-bottom: 25px;
+  margin-bottom: 25px;
+}
+
+.todo-input-item{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 25px;
+}
+
+.todo-input-item label{
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.todo-input-item input {
+  padding: 8px;
+  border: 2px solid #ccc; /* Add border style */
+  width: 250px;
+}
+
+.todo-input-item input:focus {
+  outline: 2px solid #F4512C;
+  border-color: #F4512C; /* Change border color when focused */
+}
+
+.primaryBtn{
+  background-color: #5E1B89;
+  color: white;
+  border:none;
+  border-radius: 0px;
+  margin-top: 25px;
+  padding: 10px;
+  width: 60px;
+  cursor: pointer;
+}
+
+.secondaryBtn{
+  background-color: #5E1B89;
+  color: white;
+  border:none;
+  border-radius: 0px;
+  margin-top: 25px;
+  padding: 10px;
+  width: fit-content;
+  cursor: pointer;
+
+}
+
+.active{
+  background-color: #F4512C;
+}
+
+.todo-list{
+  display: flex;
+  flex-direction: column;
+
+}
+
+.btn-area{
+  margin-bottom: 15px;
+}
+
+.todo-list-item{
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin-bottom: 10px;
+}
+
+.todo-list-item h3{
+  font-size: 25px;
+  color: black;
+  font-weight: bold;
+  margin: 0;
+}
+
+.todo-list-item p{
+  font-size: 14px;
+  color: black;
+  margin-top: 8px;
+}
+
+.icon{
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.icon:hover{
+  color: red;
+}
+
+.check-icon{
+  font-size: 25px;
+  margin-left: 10px;
+  color:#F4512C;
+  cursor: pointer;
+}
+
+
+.edit__wrapper{
+  background-color: #F4512C;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit__wrapper input,.edit__wrapper textarea{
+  border: 1px solid lightgray;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 3px;
+}
+
+.edit__wrapper .primaryBtn{
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  font-size: 16px;
+  width:fit-content;
+}
+
+.todo-wrapper {
+  position: relative;
+  /* other styles */
+
+  /* Add this to ensure the buttons don't overlap the list */
+  padding-bottom: 50px; /* Adjust as needed */
+}
+
+.todo-actions {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.delete-all-btn,
+.mark-all-complete-btn,
+.mark-all-not-complete-btn {
+  margin-left: 10px;
+  padding: 5px 10px;
+  color: white;
+  background-color: #5E1B89;
+  cursor: pointer;
+}
