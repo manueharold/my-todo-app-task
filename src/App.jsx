@@ -3,6 +3,7 @@ import './App.css';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import { BsCheckLg } from 'react-icons/bs';
 import { AiOutlineUndo } from 'react-icons/ai';
+import ConfirmationModal from './Components/ConfirmationModal';
 
 function App() {
   const [isCompleteScreen, setIsCompleteScreen] = useState(false);
@@ -12,11 +13,28 @@ function App() {
   const [completedTodos, setCompletedTodos] = useState([]);
   const [currentEdit, setCurrentEdit] = useState('');
   const [currentEditedItem, setCurrentEditedItem] = useState('');
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState('');
+  const [confirmationCallback, setConfirmationCallback] = useState(null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Functions for showing confirmation modal
+  const showConfirmation = (message, action) => {
+    setConfirmationMessage(message);
+    setConfirmationCallback(() => action); // Pass the action to the callback
+    setShowConfirmationModal(true);
+  };
+
+  const hideConfirmation = () => {
+    setShowConfirmationModal(false);
+  };
 
   const handleAddTodo = () => {
     // Check if the title field is empty
     if (!newTitle.trim()) {
-      alert("Title is required. Please enter a title for the task.");
+      setShowErrorModal(true);
+      setErrorMessage("Title is required. Please enter a title for the task.");
       return; // Exit the function if the title is empty
     }
   
@@ -26,28 +44,26 @@ function App() {
     };
 
     let updatedTodoArr = [...allTodos];
-  updatedTodoArr.push(newTodoItem);
-  setTodos(updatedTodoArr);
-  localStorage.setItem('todolist', JSON.stringify(updatedTodoArr));
+    updatedTodoArr.push(newTodoItem);
+    setTodos(updatedTodoArr);
+    localStorage.setItem('todolist', JSON.stringify(updatedTodoArr));
 
-  // Clear the text fields after adding a task
-  setNewTitle('');
-  setNewDescription('');
-};
+    // Clear the text fields after adding a task
+    setNewTitle('');
+    setNewDescription('');
+  };
 
   const handleDeleteTodo = (index) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this task?');
-    if (confirmDelete) {
+    showConfirmation('Are you sure you want to delete this task?', () => {
       let reducedTodo = [...allTodos];
       reducedTodo.splice(index, 1);
       localStorage.setItem('todolist', JSON.stringify(reducedTodo));
       setTodos(reducedTodo);
-    }
+    });
   };
 
   const handleComplete = (index) => {
-    const confirmComplete = window.confirm('Are you sure you want to mark this task as done?');
-    if (confirmComplete) {
+    showConfirmation('Are you sure you want to mark this task as done?', () => {
       let now = new Date();
       let dd = now.getDate();
       let mm = now.getMonth() + 1;
@@ -73,32 +89,29 @@ function App() {
 
       localStorage.setItem('completedTodos', JSON.stringify(updatedCompletedArr));
       localStorage.setItem('todolist', JSON.stringify(updatedAllTodos)); // Update local storage for allTodos
-    }
+    });
   };
   
   const handleDeleteCompletedTodo = (index) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this task?');
-    if (confirmDelete) {
+    showConfirmation('Are you sure you want to delete this completed task?', () => {
       let reducedTodo = [...completedTodos];
       reducedTodo.splice(index, 1);
       localStorage.setItem('completedTodos', JSON.stringify(reducedTodo));
       setCompletedTodos(reducedTodo);
-    }
+    });
   };
 
   const handleDeleteAll = () => {
-    const confirmDeleteAll = window.confirm('Are you sure you want to delete all tasks?');
-    if (confirmDeleteAll) {
+    showConfirmation('Are you sure you want to delete all tasks?', () => {
       setTodos([]);
       setCompletedTodos([]);
       localStorage.removeItem('todolist');
       localStorage.removeItem('completedTodos');
-    }
+    });
   };
 
   const handleMarkAllComplete = () => {
-    const confirmMarkAllComplete = window.confirm('Are you sure you want to mark all tasks as Done?');
-    if (confirmMarkAllComplete) {
+    showConfirmation('Are you sure you want to mark all tasks as Done?', () => {
       const now = new Date();
       const completedOn = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} at ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
   
@@ -111,19 +124,18 @@ function App() {
       setTodos([]);
       localStorage.setItem('completedTodos', JSON.stringify([...completedTodos, ...updatedAllTodos]));
       localStorage.removeItem('todolist');
-    }
+    });
   };
 
   const handleMarkAllNotComplete = () => {
-    const confirmMarkAllNotComplete = window.confirm('Are you sure you want to mark all tasks as Undone?');
-    if (confirmMarkAllNotComplete) {
+    showConfirmation('Are you sure you want to mark all tasks as Undone?', () => {
       // Iterate through completedTodos and move them to allTodos
       let updatedAllTodos = [...allTodos, ...completedTodos];
       setTodos(updatedAllTodos);
       setCompletedTodos([]);
       localStorage.setItem('todolist', JSON.stringify(updatedAllTodos));
       localStorage.removeItem('completedTodos');
-    }
+    });
   };
 
   useEffect(() => {
@@ -139,7 +151,6 @@ function App() {
   }, []);
 
   const handleEdit = (ind, item) => {
-    console.log(ind);
     setCurrentEdit(ind);
     setCurrentEditedItem(item);
   };
@@ -156,35 +167,48 @@ function App() {
     });
   };
 
-  const handleUndone = (index) => {
-    const confirmUndone = window.confirm('Are you sure you want to mark this task as undone?');
-    if (confirmUndone) {
-      // Move the task from completedTodos to allTodos
-      const undoneItem = completedTodos[index];
-      const updatedAllTodos = [...allTodos, undoneItem];
-      const updatedCompletedTodos = completedTodos.filter((_, idx) => idx !== index);
-  
-      setTodos(updatedAllTodos);
-      setCompletedTodos(updatedCompletedTodos);
-  
-      localStorage.setItem('todolist', JSON.stringify(updatedAllTodos));
-      localStorage.setItem('completedTodos', JSON.stringify(updatedCompletedTodos));
-    }
-  };
+  // Inside handleUpdateToDo function
+const handleUpdateToDo = () => {
+  // Check if title and description are not empty
+  if (!currentEditedItem.title.trim()) {
+    setErrorMessage("Title cannot be empty. Please fill it out before updating.");
+    setShowErrorModal(true);
+    return; // Exit the function if either title or description is empty
+  }
 
-  const handleUpdateToDo = () => {
-    let newToDo = [...allTodos];
-    newToDo[currentEdit] = currentEditedItem;
-    setTodos(newToDo);
-    setCurrentEdit('');
-  
-    // Update local storage with the new list of todos
-    localStorage.setItem('todolist', JSON.stringify(newToDo));
-  };
+  let newToDo = [...allTodos];
+  newToDo[currentEdit] = currentEditedItem;
+  setTodos(newToDo);
+  setCurrentEdit('');
+
+  // Update local storage with the new list of todos
+  localStorage.setItem('todolist', JSON.stringify(newToDo));
+};
+
+
 
   return (
     <div className="App">
       <h1 className="todo-header">My Todos</h1>
+
+      <ConfirmationModal
+  isOpen={showConfirmationModal}
+  message={confirmationMessage}
+  onConfirm={() => {
+    hideConfirmation(); // Hide the modal
+    if (confirmationCallback) {
+      confirmationCallback(); // Execute the confirmation callback if provided
+    }
+  }}
+  onCancel={hideConfirmation} // Hide the modal if the user cancels
+/>
+
+      <ConfirmationModal
+  isOpen={showErrorModal}
+  message={errorMessage}
+  onConfirm={() => setShowErrorModal(false)}
+  onCancel={() => setShowErrorModal(false)}
+/>
 
       <div className="todo-wrapper">
         <div className="todo-input">
@@ -194,7 +218,7 @@ function App() {
               type="text"
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="What's the task title?"
+              placeholder="Task Title"
             />
           </div>
           <div className="todo-input-item">
@@ -203,7 +227,7 @@ function App() {
               type="text"
               value={newDescription}
               onChange={(e) => setNewDescription(e.target.value)}
-              placeholder="What's the task description?"
+              placeholder="Task Description"
             />
           </div>
           <div className="todo-input-item">
@@ -267,29 +291,27 @@ function App() {
               }
             })}
           {isCompleteScreen === true &&
-        completedTodos.map((item, index) => {
-          return (
-          <div className="todo-list-item" key={index}>
-          <div>
-          <h3 style={{ textDecoration: 'line-through' }}>{item.title}</h3>
-          <p style={{ textDecoration: 'line-through' }}>{item.description}</p>
-          <p><small>Done on: {item.completedOn}</small></p>
-          </div>
-          <div>
-          <AiOutlineDelete
-            className="icon"
-            onClick={() => handleDeleteCompletedTodo(index)}
-            title="Delete?"
-          />
-          <AiOutlineUndo
-            className="check-icon"
-            onClick={() => handleUndone(index)}
-            title="Undone?"
-          />
-        </div>
-        </div>
-      );
-      })}
+            completedTodos.map((item, index) => (
+              <div className="todo-list-item" key={index}>
+                <div>
+                  <h3 style={{ textDecoration: 'line-through' }}>{item.title}</h3>
+                  <p style={{ textDecoration: 'line-through' }}>{item.description}</p>
+                  <p><small>Done on: {item.completedOn}</small></p>
+                </div>
+                <div>
+                  <AiOutlineDelete
+                    className="icon"
+                    onClick={() => handleDeleteCompletedTodo(index)}
+                    title="Delete?"
+                  />
+                  <AiOutlineUndo
+                    className="check-icon"
+                    onClick={() => handleUndone(index)}
+                    title="Undone?"
+                  />
+                </div>
+              </div>
+            ))}
         </div>
         {/* Buttons for delete all and mark all */}
         <div className="todo-actions">
