@@ -50,6 +50,14 @@ box-shadow: 0px 5px 7px #F4512C;
   color: #5E1B89; 
 }
 
+.todo-input-item input::placeholder {
+  color: #5E1B89;
+}
+
+.todo-input-item textarea::placeholder {
+  color: #5E1B89;
+}
+
 .todo-input-item input {
   padding: 8px;
   border: 2px solid #ccc; 
